@@ -1,188 +1,200 @@
-🏢 Employee Management System - Backend API
+Tak-02: Employee Management System
+##Prodigy Infotech Pvt Lmt.,
 
-Prodigy Infotech Internship — Task 02
+ Overview:
+    The Employee Management System is a full-stack web application developed to simplify employee record management within an organization. This project allows administrators to securely manage employee information through a user-friendly interface with authentication and complete CRUD (Create, Read, Update, Delete) operations.The application is built using modern web technologies including HTML, CSS, JavaScript, Node.js, Express.js, and MongoDB. It demonstrates full-stack development concepts such as REST APIs, database integration, authentication, validation, and secure data handling.This project was developed as part of my internship to gain practical experience in backend development, database management, API development, and GitHub collaboration.
 
-Built with Node.js, Express.js, and MongoDB
+Features:
+- User Authentication (Admin Login)
+- Secure Password Hashing using bcrypt
+- JWT Authentication
+- Add New Employee
+- View Employee Details
+- Update Employee Information
+- Delete Employee Records
+- Employee Search Functionality
+- Form Validation
+- Responsive User Interface
+- RESTful API Architecture
+- MongoDB Database Integration
+- Error Handling
+- Protected Routes
+
+ Technologies Used:
+
+ Frontend
+- HTML5
+- CSS3
+- JavaScript
+
+ Backend
+
+- Node.js
+- Express.js
+
+ Database
+
+- MongoDB
+- Mongoose
+
+ Authentication
+
+- JSON Web Token (JWT)
+- bcrypt.js
+
+ Additional Packages
+
+- dotenv
+- cors
+- multer
+- validator
+- morgan
+- nodemon
 
  Project Structure
 
-employee-management-backend/
-├── config/
-│   └── db.js                  # MongoDB connection
-├── controllers/
-│   ├── authController.js      # Register, Login, Me, Logout
-│   └── employeeController.js  # CRUD + Stats
-├── middleware/
-│   ├── auth.js                # JWT protect + role authorize
-│   ├── errorHandler.js        # Global error handler
-│   └── validate.js            # express-validator rules
-├── models/
-│   ├── Admin.js               # Admin/User schema
-│   └── Employee.js            # Employee schema
-├── routes/
-│   ├── authRoutes.js          # /api/auth/*
-│   └── employeeRoutes.js      # /api/employees/*
-├── utils/
-│   └── generateToken.js       # JWT token helper
-├── .env.example
-├── .gitignore
-├── package.json
-├── seed.js                    # Seed admin + sample data
-└── server.js                  # Entry point
+Employee-Management-System/
+│
+├── client/
+│   ├── html/
+│   ├── css/
+│   ├── js/
+│
+├── server/
+│   ├── config/
+│   ├── controllers/
+│   ├── middleware/
+│   ├── models/
+│   ├── routes/
+│   ├── uploads/
+│   ├── server.js
+│   ├── package.json
+│   └── .env
+│
+└── README.md
+
+ Functional Modules
+
+Authentication Module
+
+- Admin Registration
+- Admin Login
+- JWT Token Generation
+- Password Encryption
+- Protected Routes
+
+Employee Module
+- Create Employee
+- Read Employee
+- Update Employee
+- Delete Employee
+- Search Employee
+
+ Database Module
+
+- MongoDB Connection
+- Employee Collection
+- User Collection
+
+ REST API Endpoints
+
+ Authentication
+
+| Method | Endpoint | Description |
+|----------|----------------|----------------|
+| POST | /api/auth/register | Register Admin |
+| POST | /api/auth/login | Login Admin |
+
+ Employees
+
+| Method | Endpoint | Description |
+|----------|--------------------|----------------------|
+| GET | /api/employees | Get All Employees |
+| GET | /api/employees/:id | Get Employee |
+| POST | /api/employees | Add Employee |
+| PUT | /api/employees/:id | Update Employee |
+| DELETE | /api/employees/:id | Delete Employee |
 
 
- Getting Started
+Installation
 
-1. Clone & Install
+Clone Repository
 
-bashgit clone <your-repo-url>
-cd employee-management-backend
+```bash
+git clone https://github.com/yourusername/Employee-Management-System.git
+```
+ Navigate to Project
+
+```bash
+cd Employee-Management-System/server
+```
+ Install Dependencies
+
+```bash
 npm install
+```
+ Create Environment File
 
-2. Setup Environment
+Create a `.env` file.
 
-bashcp .env.example .env
+```env
+PORT=5000
+MONGODB_URI=your_mongodb_connection_string
+JWT_SECRET=your_secret_key
+TOKEN_EXPIRE=1d
+```
+ Start Server
 
-Edit .env:
-
-envPORT=5000
-NODE_ENV=development
-MONGO_URI=mongodb://localhost:27017/employee_management
-JWT_SECRET=your_super_secret_key_here
-JWT_EXPIRE=7d
-ADMIN_EMAIL=admin@company.com
-ADMIN_PASSWORD=Admin@123456
-
-3. Seed First Admin
-
-bashnode seed.js
-
-4. (Optional) Add Sample Employees
-
-bashnode seed.js --employees
-
-5. Start Server
-
-bash# Development (with auto-reload)
+```bash
 npm run dev
+```
 
-# Production
+or
+
+```bash
 npm start
+```
 
+---
 
-🔐 Authentication
+Future Enhancements
 
-All employee routes require a JWT token.
+- Employee Attendance Management
+- Payroll System
+- Leave Management
+- Role-Based Access Control
+- Email Notifications
+- Dashboard Analytics
+- Export Data to Excel/PDF
+- Cloud Image Storage
+- Docker Deployment
 
-Login → get token → send in header:
+---
+ Learning Outcomes
 
-Authorization: Bearer <your_token_here>
+This project helped me understand:
 
+- Backend Development with Node.js
+- Express.js Framework
+- MongoDB Database
+- REST API Development
+- JWT Authentication
+- Password Encryption
+- CRUD Operations
+- MVC Architecture
+- Git & GitHub Workflow
+- Full Stack Web Development
 
-📡 API Endpoints
+---
+Author
 
-Auth Routes — /api/auth
+**THIYAGARAJAN S **
 
-MethodEndpointAccessDescriptionPOST/api/auth/registerPublicRegister new adminPOST/api/auth/loginPublicLogin & get tokenGET/api/auth/mePrivateGet logged-in adminPUT/api/auth/change-passwordPrivateChange passwordPOST/api/auth/logoutPrivateLogout
+Bachelor of Engineering (Computer Science and Engineering)
 
+GitHub Internship Project
 
-Employee Routes — /api/employees
+---
+ License
 
-MethodEndpointAccessDescriptionGET/api/employeesAdminGet all employees (with filters)POST/api/employeesAdminCreate new employeeGET/api/employees/statsAdminGet statistics & countsGET/api/employees/:idAdminGet employee by IDPUT/api/employees/:idAdminUpdate employeeDELETE/api/employees/:idSuperadminDelete employee
-
-
-Query Parameters for GET /api/employees
-
-ParamExampleDescriptionpage?page=1Page numberlimit?limit=10Results per pagesearch?search=RahulSearch name/email/IDdepartment?department=EngineeringFilter by deptstatus?status=ActiveFilter by statusgender?gender=MaleFilter by gendersortBy?sortBy=salarySort fieldorder?order=ascasc or desc
-
-Example:
-
-GET /api/employees?page=1&limit=5&department=Engineering&status=Active&sortBy=salary&order=desc
-
-
-📝 Request Body Examples
-
-Register Admin
-
-jsonPOST /api/auth/register
-{
-  "name": "John Admin",
-  "email": "john@company.com",
-  "password": "Admin@1234"
-}
-
-Login
-
-jsonPOST /api/auth/login
-{
-  "email": "admin@company.com",
-  "password": "Admin@123456"
-}
-
-Create Employee
-
-jsonPOST /api/employees
-Authorization: Bearer <token>
-
-{
-  "firstName": "Rahul",
-  "lastName": "Sharma",
-  "email": "rahul@company.com",
-  "phone": "9876543210",
-  "department": "Engineering",
-  "designation": "Software Engineer",
-  "salary": 85000,
-  "dateOfJoining": "2024-01-15",
-  "dateOfBirth": "1995-05-20",
-  "gender": "Male",
-  "address": {
-    "street": "123 Main St",
-    "city": "Chennai",
-    "state": "Tamil Nadu",
-    "country": "India",
-    "pincode": "600001"
-  }
-}
-
-Update Employee
-
-jsonPUT /api/employees/:id
-Authorization: Bearer <token>
-
-{
-  "designation": "Senior Software Engineer",
-  "salary": 100000,
-  "status": "Active"
-}
-
-
-🏗️ Employee Fields
-
-FieldTypeRequiredNotesemployeeIdStringAutoEMP0001, EMP0002...firstNameString✅lastNameString✅emailString✅UniquephoneString✅10-15 digitsdepartmentEnum✅See list belowdesignationString✅salaryNumber✅dateOfJoiningDate✅dateOfBirthDate✅Min age 18genderEnum✅addressObject❌street, city, state, country, pincodestatusEnum❌Active (default), Inactive, On Leave, Terminated
-
-Departments: Engineering, Marketing, Sales, HR, Finance, Operations, Design, Legal, Support, Management
-
-
-🔒 Security Features
-
-
-JWT Authentication — Stateless token-based auth
-bcrypt Password Hashing — 12 salt rounds
-Rate Limiting — 100 req/15min globally, 10 req/15min on auth
-Input Validation — All inputs validated with express-validator
-Role-Based Access — admin vs superadmin roles
-CORS — Configurable allowed origins
-Password never returned — select: false on password field
-
-
-
-🛠️ Tech Stack
-
-TechnologyPurposeNode.jsRuntimeExpress.jsWeb frameworkMongoDBDatabaseMongooseODMJWTAuthenticationbcryptjsPassword hashingexpress-validatorInput validationexpress-rate-limitRate limitingcorsCross-origin requestsmorganRequest loggingdotenvEnvironment config
-
-
-👤 Author
-
-Your Name
-
-Prodigy Infotech Internship — Task 02
+This project is developed for educational and internship purposes.
