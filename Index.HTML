@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>EMS — Employee Management System</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet" />
+</head>
+<body>
+
+  <!-- ─── AUTH SCREEN ─────────────────────────────────── -->
+  <div id="authScreen" class="auth-screen">
+    <div class="auth-bg-art">
+      <div class="blob blob-1"></div>
+      <div class="blob blob-2"></div>
+    </div>
+    <div class="auth-card">
+      <div class="auth-brand">
+        <div class="brand-icon">⬡</div>
+        <span class="brand-name">EMS</span>
+      </div>
+
+      <!-- Login Form -->
+      <div id="loginForm">
+        <h2 class="auth-title">Welcome back</h2>
+        <p class="auth-sub">Sign in to manage your team</p>
+        <div class="form-group">
+          <label>Email</label>
+          <input type="email" id="loginEmail" placeholder="admin@company.com" />
+        </div>
+        <div class="form-group">
+          <label>Password</label>
+          <input type="password" id="loginPassword" placeholder="••••••••" />
+        </div>
+        <div id="loginError" class="form-error hidden"></div>
+        <button class="btn btn-primary btn-full" onclick="handleLogin()">Sign In</button>
+        <p class="auth-switch">No account? <a href="#" onclick="toggleAuth()">Register here</a></p>
+      </div>
+
+      <!-- Register Form -->
+      <div id="registerForm" class="hidden">
+        <h2 class="auth-title">Create account</h2>
+        <p class="auth-sub">Set up your admin account</p>
+        <div class="form-group">
+          <label>Full Name</label>
+          <input type="text" id="regName" placeholder="John Doe" />
+        </div>
+        <div class="form-group">
+          <label>Email</label>
+          <input type="email" id="regEmail" placeholder="admin@company.com" />
+        </div>
+        <div class="form-group">
+          <label>Password</label>
+          <input type="password" id="regPassword" placeholder="Min 6 characters" />
+        </div>
+        <div id="regError" class="form-error hidden"></div>
+        <button class="btn btn-primary btn-full" onclick="handleRegister()">Create Account</button>
+        <p class="auth-switch">Have an account? <a href="#" onclick="toggleAuth()">Sign in</a></p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── MAIN APP ─────────────────────────────────────── -->
+  <div id="appScreen" class="app-screen hidden">
+
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="sidebar-brand">
+        <div class="brand-icon">⬡</div>
+        <span class="brand-name">EMS</span>
+      </div>
+      <nav class="sidebar-nav">
+        <a href="#" class="nav-item active" onclick="showPage('dashboard', this)">
+          <span class="nav-icon">◈</span> Dashboard
+        </a>
+        <a href="#" class="nav-item" onclick="showPage('employees', this)">
+          <span class="nav-icon">◉</span> Employees
+        </a>
+        <a href="#" class="nav-item" onclick="showPage('add', this)">
+          <span class="nav-icon">⊕</span> Add Employee
+        </a>
+      </nav>
+      <div class="sidebar-footer">
+        <div class="user-pill">
+          <div class="user-avatar" id="userAvatarSidebar">A</div>
+          <div class="user-info">
+            <span class="user-name" id="userNameSidebar">Admin</span>
+            <span class="user-role">Administrator</span>
+          </div>
+        </div>
+        <button class="btn-logout" onclick="handleLogout()" title="Logout">↩</button>
+      </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+
+      <!-- Top Bar -->
+      <header class="topbar">
+        <div>
+          <h1 class="page-title" id="pageTitle">Dashboard</h1>
+          <p class="page-sub" id="pageSub">Overview of your workforce</p>
+        </div>
+        <div class="topbar-right">
+          <div class="search-wrapper" id="searchWrapper" style="display:none">
+            <span class="search-icon">⌕</span>
+            <input type="text" id="searchInput" placeholder="Search employees..." oninput="debounceSearch()" />
+          </div>
+        </div>
+      </header>
+
+      <!-- ── Dashboard Page ── -->
+      <section id="page-dashboard" class="page active">
+        <div class="stats-grid">
+          <div class="stat-card stat-total">
+            <div class="stat-label">Total Employees</div>
+            <div class="stat-value" id="statTotal">—</div>
+            <div class="stat-icon">👥</div>
+          </div>
+          <div class="stat-card stat-active">
+            <div class="stat-label">Active</div>
+            <div class="stat-value" id="statActive">—</div>
+            <div class="stat-icon">✅</div>
+          </div>
+          <div class="stat-card stat-leave">
+            <div class="stat-label">On Leave</div>
+            <div class="stat-value" id="statLeave">—</div>
+            <div class="stat-icon">🌴</div>
+          </div>
+          <div class="stat-card stat-salary">
+            <div class="stat-label">Avg. Salary</div>
+            <div class="stat-value" id="statSalary">—</div>
+            <div class="stat-icon">💰</div>
+          </div>
+        </div>
+
+        <div class="dashboard-grid">
+          <div class="card">
+            <h3 class="card-title">By Department</h3>
+            <div id="deptList" class="dept-list"></div>
+          </div>
+          <div class="card">
+            <h3 class="card-title">Recent Employees</h3>
+            <div id="recentList" class="recent-list"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ── Employees List Page ── -->
+      <section id="page-employees" class="page hidden">
+        <div class="toolbar">
+          <div class="filter-row">
+            <select id="filterDept" onchange="loadEmployees()" class="select-input">
+              <option value="">All Departments</option>
+              <option>Engineering</option><option>Marketing</option>
+              <option>HR</option><option>Finance</option>
+              <option>Sales</option><option>Operations</option>
+              <option>Design</option><option>Legal</option>
+            </select>
+            <select id="filterStatus" onchange="loadEmployees()" class="select-input">
+              <option value="">All Status</option>
+              <option>Active</option><option>Inactive</option><option>On Leave</option>
+            </select>
+          </div>
+          <button class="btn btn-primary" onclick="showPage('add', document.querySelector('[onclick*=\"add\"]'))">+ Add Employee</button>
+        </div>
+
+        <div class="table-wrapper">
+          <table class="emp-table">
+            <thead>
+              <tr>
+                <th>ID</th><th>Name</th><th>Department</th>
+                <th>Position</th><th>Salary</th><th>Status</th><th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="empTableBody">
+              <tr><td colspan="7" class="table-empty">Loading...</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="pagination" id="pagination"></div>
+      </section>
+
+      <!-- ── Add / Edit Employee Page ── -->
+      <section id="page-add" class="page hidden">
+        <div class="form-card">
+          <h2 class="form-card-title" id="formTitle">Add New Employee</h2>
+
+          <div class="form-grid">
+            <div class="form-group">
+              <label>First Name *</label>
+              <input type="text" id="empFirstName" placeholder="John" />
+            </div>
+            <div class="form-group">
+              <label>Last Name *</label>
+              <input type="text" id="empLastName" placeholder="Doe" />
+            </div>
+            <div class="form-group">
+              <label>Email *</label>
+              <input type="email" id="empEmail" placeholder="john@company.com" />
+            </div>
+            <div class="form-group">
+              <label>Phone *</label>
+              <input type="tel" id="empPhone" placeholder="+91 98765 43210" />
+            </div>
+            <div class="form-group">
+              <label>Department *</label>
+              <select id="empDept" class="select-input">
+                <option value="">Select Department</option>
+                <option>Engineering</option><option>Marketing</option>
+                <option>HR</option><option>Finance</option>
+                <option>Sales</option><option>Operations</option>
+                <option>Design</option><option>Legal</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Position *</label>
+              <input type="text" id="empPosition" placeholder="Software Engineer" />
+            </div>
+            <div class="form-group">
+              <label>Salary (₹) *</label>
+              <input type="number" id="empSalary" placeholder="50000" min="0" />
+            </div>
+            <div class="form-group">
+              <label>Join Date *</label>
+              <input type="date" id="empJoinDate" />
+            </div>
+            <div class="form-group">
+              <label>Status</label>
+              <select id="empStatus" class="select-input">
+                <option>Active</option><option>Inactive</option><option>On Leave</option>
+              </select>
+            </div>
+            <div class="form-group form-group-full">
+              <label>Address</label>
+              <input type="text" id="empAddress" placeholder="123 Main St, City" />
+            </div>
+          </div>
+
+          <div id="formError" class="form-error hidden"></div>
+          <div id="formSuccess" class="form-success hidden"></div>
+
+          <div class="form-actions">
+            <button class="btn btn-ghost" onclick="resetForm()">Clear</button>
+            <button class="btn btn-primary" id="submitBtn" onclick="handleSubmitEmployee()">Add Employee</button>
+          </div>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <!-- ─── MODAL ─────────────────────────────────────────── -->
+  <div id="modal" class="modal-overlay hidden" onclick="closeModal(event)">
+    <div class="modal-box">
+      <div class="modal-header">
+        <h3 id="modalTitle">Employee Details</h3>
+        <button class="modal-close" onclick="closeModalDirect()">✕</button>
+      </div>
+      <div id="modalBody" class="modal-body"></div>
+    </div>
+  </div>
+
+  <!-- Toast notification -->
+  <div id="toast" class="toast hidden"></div>
+
+  <script src="js/api.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
