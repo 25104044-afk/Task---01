@@ -1,10 +1,13 @@
 Tak-02: Employee Management System
+
 ##Prodigy Infotech Pvt Lmt.,
 
  Overview:
+
     The Employee Management System is a full-stack web application developed to simplify employee record management within an organization. This project allows administrators to securely manage employee information through a user-friendly interface with authentication and complete CRUD (Create, Read, Update, Delete) operations.The application is built using modern web technologies including HTML, CSS, JavaScript, Node.js, Express.js, and MongoDB. It demonstrates full-stack development concepts such as REST APIs, database integration, authentication, validation, and secure data handling.This project was developed as part of my internship to gain practical experience in backend development, database management, API development, and GitHub collaboration.
 
 Features:
+
 - User Authentication (Admin Login)
 - Secure Password Hashing using bcrypt
 - JWT Authentication
